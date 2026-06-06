@@ -1,0 +1,122 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useContext } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { DataContext } from "../../context/DataContext";
+import ExamScreen from "../screens/exam/ExamScreen";
+import HomeScreen from "../screens/HomeScreen";
+import LessonsScreen from "../screens/lessons/LessonsScreen";
+
+const Stack = createNativeStackNavigator();
+const LESSONS_STORAGE_KEY = "lessons";
+
+const HeaderButton = ({ navigation, navigate, icon, text, palette }) => (
+  <View
+    style={{
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      marginLeft: 10,
+      gap: 2,
+    }}
+  >
+    <TouchableOpacity onPress={() => navigation.navigate(navigate)}>
+      <Ionicons name={icon} size={24} color={palette.white.base} />
+    </TouchableOpacity>
+    <Text
+      style={{
+        color: palette.white.base,
+        fontSize: 12,
+      }}
+    >
+      {text}
+    </Text>
+  </View>
+);
+
+export default function AppNavigator() {
+  const { ascncData, palette } = useContext(DataContext);
+
+  const logDataSources = async () => {
+    try {
+      const asyncLessons = await AsyncStorage.getItem(LESSONS_STORAGE_KEY);
+
+      console.log("CONTEXT DATA:", ascncData);
+      console.log(
+        "ASYNC STORAGE DATA:",
+        asyncLessons ? JSON.parse(asyncLessons) : null,
+      );
+    } catch (error) {
+      console.log("CONTEXT DATA:", ascncData);
+      console.warn("ASYNC STORAGE DATA could not be read:", error);
+    }
+  };
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={({ navigation }) => ({
+          headerStyle: {
+            backgroundColor: palette.app.primary,
+          },
+          headerTintColor: palette.white.base,
+          headerTitle: () => (
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={logDataSources}
+              style={{
+                width: 220,
+                height: 48,
+              }}
+            />
+          ),
+          headerLeft: () => (
+            <>
+              <HeaderButton
+                navigation={navigation}
+                navigate="Home"
+                icon="home-outline"
+                text="Anasayfa"
+                palette={palette}
+              />
+              <HeaderButton
+                navigation={navigation}
+                navigate="lessons"
+                icon="book-outline"
+                text="sınav"
+                palette={palette}
+              />
+            </>
+          ),
+        })}
+      >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: "",
+            animation: "fade",
+          }}
+        />
+        <Stack.Screen
+          name="lessons"
+          component={LessonsScreen}
+          options={{
+            title: "",
+            animation: "fade",
+          }}
+        />
+        <Stack.Screen
+          name="Exam"
+          component={ExamScreen}
+          options={{
+            headerShown: false,
+            animation: "fade",
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}

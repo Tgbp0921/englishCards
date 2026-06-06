@@ -1,0 +1,73 @@
+Starting project at C:\Users\birol\OneDrive\Desktop\native\englishCards
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 2871ms index.js (1040 modules)
+ LOG  [web] Logs will appear in the browser console
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 55ms index.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 55ms index.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Unable to resolve "../screens/exam/ExamScreen" from "src\navigation\AppNavigator.js"
+[0m [90m  5 |[39m [36mimport[39m { [33mText[39m[33m,[39m [33mTouchableOpacity[39m[33m,[39m [33mView[39m } [36mfrom[39m [32m"react-native"[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mDataContext[39m } [36mfrom[39m [32m"../../context/DataContext"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mExamScreen[39m [36mfrom[39m [32m"../screens/exam/ExamScreen"[39m[33m;[39m
+ [90m    |[39m                         [31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mHomeScreen[39m [36mfrom[39m [32m"../screens/HomeScreen"[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mLessonsScreen[39m [36mfrom[39m [32m"../screens/lessons/LessonsScreen"[39m[33m;[39m
+ [90m 10 |[39m[0m
+
+Import stack:
+
+ src\navigation\AppNavigator.js
+ | import "../screens/exam/ExamScreen"
+
+ App.js
+ | import "./src/navigation/AppNavigator"
+
+ index.js
+ | import "./App"
+
+ 
+ | import "./index"
+
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundling failed 24ms index.js (1 module)
+Unable to resolve "../screens/exam/ExamScreen" from "src\navigation\AppNavigator.js"
+[0m [90m  5 |[39m [36mimport[39m { [33mText[39m[33m,[39m [33mTouchableOpacity[39m[33m,[39m [33mView[39m } [36mfrom[39m [32m"react-native"[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mDataContext[39m } [36mfrom[39m [32m"../../context/DataContext"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mExamScreen[39m [36mfrom[39m [32m"../screens/exam/ExamScreen"[39m[33m;[39m
+ [90m    |[39m                         [31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mHomeScreen[39m [36mfrom[39m [32m"../screens/HomeScreen"[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mLessonsScreen[39m [36mfrom[39m [32m"../screens/lessons/LessonsScreen"[39m[33m;[39m
+ [90m 10 |[39m[0m
+
+Import stack:
+
+ src\navigation\AppNavigator.js
+ | import "../screens/exam/ExamScreen"
+
+ App.js
+ | import "./src/navigation/AppNavigator"
+
+ index.js
+ | import "./App"
+
+ 
+ | import "./index"
+
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 413ms index.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 47ms index.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 57ms index.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web .\index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 58ms index.js (1 module)
+ LOG  [web] Logs will appear in the browser console
