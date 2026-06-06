@@ -93,3 +93,18 @@ verdiği cevap yanlışsa süre bitmediyse tekrar ses kaydı alarak cevaplama ha
 sınav sırasında bir çubuk bar üzerinde ne kadar kart oldugunu ve ne kadar ilerlediğini göster. bilemediği soruların kutuları kırmızıdır. uanlar 0-50 arası kırmızı, 50-70 arası mavi, 70-85 arası açık yeşil, 85-100 arası koyu yeşille yazılır. bu renkler palette olacak oradan çek.
 
 sınav bitiminde kullanıcıya en üstte toplam puan gösterilir. toplam puan tün soruların ortalamasıdır. altta kelimeler map edilerek en -> tr yanında kaça puan aldıkları yazılır. burada veriler async ve context e eklenir. enToTrLastExamDate date.now olacak. ekranda anamenü ikonu olur ve home navigate edilir.
+
+---
+
+3. sayfa navigasyon içinde kalem ile göster altında da Çalışma yazsın. diğerlerinin kullandığı componentle yap. navigate adresi study olsun. studyScreen.js oluştur. içinde dersler map edilsin, tablo gibi olmasın üstte dersin adı ve toplam kelime sayısı, altta da puanlar 0-50 arası , 50-70 arası , 70-85 arası, 85-100 arası olarak kelime sayıları yazsın,
+
+derse tıklanınca yine en-tr tr-en seçimi olsun. exam sayfasındaki sınav sayfasının benzeri gelsin. burada soru sayısı gösterilmeyecek. kart gelecek ve cevaplanacak. puanı ve zamanı fromEnToTrPoints veya fromTrToEnPoints
+e kaydeilecek.
+
+ her cevap sonrası arkada bir fonksiyon çalışsın ve son 5 sorunun ortalamaları karşılaştırılsın.
+ en düşük olan cart ekrana gelsin. ama bir önceki kart gelmesin, aynı kart gelecekse puanı düşük diğer kart gelsin. yukarıda yine zaman gerisayım barı olsun. süre bitince 0 puan verilsin. soru bilinirse puanlama yine sınav sayfasındaki gibi olsun
+ önceki sayfaya git butonu ve en->tr yazısı kalksın. hatta navigasyon görünmesin
+
+
+
+4. karışık soru sayfası

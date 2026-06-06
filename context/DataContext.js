@@ -55,7 +55,13 @@ const normalizeCard = (card) => {
 };
 
 const normalizeLesson = (lesson) => {
-  const { enToTrPoint, trToEnPoint, ...lessonWithoutOldPoints } = lesson;
+  const {
+    enToTrPoint,
+    trToEnPoint,
+    enToTrLastExamDate,
+    trToEnLastExamDate,
+    ...lessonWithoutOldPoints
+  } = lesson;
 
   return {
     ...lessonWithoutOldPoints,
@@ -65,14 +71,33 @@ const normalizeLesson = (lesson) => {
 
 const normalizeLessons = (lessons) => (lessons || []).map(normalizeLesson);
 
+const createSeedCard = ({ english, turkish, example, imgSrc }) => ({
+  id: Math.random(),
+  english,
+  turkish,
+  example,
+  exampleSound: "",
+  englishSound: "",
+  imgSrc,
+  fromEnToTrPoints: [],
+  fromTrToEnPoints: [],
+});
+
+const createSeedLesson = ({ name, cards }) => ({
+  name,
+  date: seedDate,
+  id: Math.random(),
+  enToTrExams: [],
+  trToEnExams: [],
+  cards: cards.map(createSeedCard),
+});
+
 const initialLessons = [
   {
     name: "1. ders",
     date: seedDate,
     id: Math.random(),
-    enToTrLastExamDate: null,
     enToTrExams: [{ date: seedDate, point: 50 }],
-    trToEnLastExamDate: null,
     trToEnExams: [{ date: seedDate, point: 30 }],
     cards: [
       {
@@ -110,7 +135,278 @@ const initialLessons = [
       },
     ],
   },
+  createSeedLesson({
+    name: "2. ders",
+    cards: [
+      {
+        english: "say",
+        turkish: "söylemek",
+        example: "Please say your name.",
+        imgSrc: "https://source.unsplash.com/featured/?speaking",
+      },
+      {
+        english: "think",
+        turkish: "düşünmek",
+        example: "I think it is a good idea.",
+        imgSrc: "https://source.unsplash.com/featured/?thinking",
+      },
+      {
+        english: "my week",
+        turkish: "haftam",
+        example: "My week was very busy.",
+        imgSrc: "https://source.unsplash.com/featured/?calendar",
+      },
+      {
+        english: "early",
+        turkish: "erken",
+        example: "She arrived early.",
+        imgSrc: "https://source.unsplash.com/featured/?morning",
+      },
+      {
+        english: "often",
+        turkish: "sık sık",
+        example: "I often visit my grandparents.",
+        imgSrc: "https://source.unsplash.com/featured/?routine",
+      },
+      {
+        english: "grew",
+        turkish: "büyüdü",
+        example: "The plant grew quickly.",
+        imgSrc: "https://source.unsplash.com/featured/?plant",
+      },
+      {
+        english: "before",
+        turkish: "önce",
+        example: "Wash your hands before dinner.",
+        imgSrc: "https://source.unsplash.com/featured/?clock",
+      },
+      {
+        english: "keep",
+        turkish: "saklamak / sürdürmek",
+        example: "Keep your room clean.",
+        imgSrc: "https://source.unsplash.com/featured/?storage",
+      },
+      {
+        english: "prediction",
+        turkish: "tahmin",
+        example: "My prediction was correct.",
+        imgSrc: "https://source.unsplash.com/featured/?forecast",
+      },
+      {
+        english: "survey",
+        turkish: "anket",
+        example: "We completed a survey at school.",
+        imgSrc: "https://source.unsplash.com/featured/?survey",
+      },
+      {
+        english: "environment",
+        turkish: "çevre",
+        example: "We should protect the environment.",
+        imgSrc: "https://source.unsplash.com/featured/?environment",
+      },
+      {
+        english: "box",
+        turkish: "kutu",
+        example: "The toy is in the box.",
+        imgSrc: "https://source.unsplash.com/featured/?box",
+      },
+      {
+        english: "vegetable",
+        turkish: "sebze",
+        example: "Carrot is a vegetable.",
+        imgSrc: "https://source.unsplash.com/featured/?vegetable",
+      },
+      {
+        english: "bowl",
+        turkish: "kase",
+        example: "The soup is in the bowl.",
+        imgSrc: "https://source.unsplash.com/featured/?bowl",
+      },
+      {
+        english: "bottle",
+        turkish: "şişe",
+        example: "I bought a bottle of water.",
+        imgSrc: "https://source.unsplash.com/featured/?bottle",
+      },
+      {
+        english: "cheese",
+        turkish: "peynir",
+        example: "I like cheese on pizza.",
+        imgSrc: "https://source.unsplash.com/featured/?cheese",
+      },
+      {
+        english: "what kind",
+        turkish: "ne tür",
+        example: "What kind of music do you like?",
+        imgSrc: "https://source.unsplash.com/featured/?question",
+      },
+      {
+        english: "pear",
+        turkish: "armut",
+        example: "She ate a pear.",
+        imgSrc: "https://source.unsplash.com/featured/?pear",
+      },
+      {
+        english: "sauce",
+        turkish: "sos",
+        example: "Add some sauce to the pasta.",
+        imgSrc: "https://source.unsplash.com/featured/?sauce",
+      },
+      {
+        english: "sweet",
+        turkish: "tatlı",
+        example: "This cake is very sweet.",
+        imgSrc: "https://source.unsplash.com/featured/?dessert",
+      },
+      {
+        english: "sack",
+        turkish: "çuval",
+        example: "The potatoes are in a sack.",
+        imgSrc: "https://source.unsplash.com/featured/?sack",
+      },
+      {
+        english: "big",
+        turkish: "büyük",
+        example: "They live in a big house.",
+        imgSrc: "https://source.unsplash.com/featured/?big-house",
+      },
+      {
+        english: "the biggest",
+        turkish: "en büyük",
+        example: "It is the biggest building in town.",
+        imgSrc: "https://source.unsplash.com/featured/?skyscraper",
+      },
+      {
+        english: "mistake",
+        turkish: "hata",
+        example: "Everyone makes mistakes.",
+        imgSrc: "https://source.unsplash.com/featured/?error",
+      },
+    ],
+  }),
+  createSeedLesson({
+    name: "3. ders",
+    cards: [
+      {
+        english: "poetry",
+        turkish: "şiir",
+        example: "She loves reading poetry.",
+        imgSrc: "https://source.unsplash.com/featured/?poetry",
+      },
+      {
+        english: "rhyme",
+        turkish: "uyak / kafiye",
+        example: "Cat and hat rhyme.",
+        imgSrc: "https://source.unsplash.com/featured/?book",
+      },
+      {
+        english: "competition",
+        turkish: "yarışma",
+        example: "He won the competition.",
+        imgSrc: "https://source.unsplash.com/featured/?competition",
+      },
+      {
+        english: "acrostic",
+        turkish: "akrostiş",
+        example: "We wrote an acrostic poem.",
+        imgSrc: "https://source.unsplash.com/featured/?writing",
+      },
+      {
+        english: "wing",
+        turkish: "kanat",
+        example: "The bird spread its wings.",
+        imgSrc: "https://source.unsplash.com/featured/?wing",
+      },
+      {
+        english: "letter",
+        turkish: "harf",
+        example: "A is the first letter.",
+        imgSrc: "https://source.unsplash.com/featured/?alphabet",
+      },
+      {
+        english: "line",
+        turkish: "satır / çizgi",
+        example: "Draw a straight line.",
+        imgSrc: "https://source.unsplash.com/featured/?line",
+      },
+      {
+        english: "spell",
+        turkish: "hecelemek",
+        example: "Can you spell your name?",
+        imgSrc: "https://source.unsplash.com/featured/?spelling",
+      },
+      {
+        english: "connected to",
+        turkish: "bağlı",
+        example: "The printer is connected to the computer.",
+        imgSrc: "https://source.unsplash.com/featured/?connection",
+      },
+      {
+        english: "a bag of",
+        turkish: "bir paket / torba",
+        example: "I bought a bag of apples.",
+        imgSrc: "https://source.unsplash.com/featured/?shopping-bag",
+      },
+      {
+        english: "want to",
+        turkish: "istemek",
+        example: "I want to learn English.",
+        imgSrc: "https://source.unsplash.com/featured/?goal",
+      },
+      {
+        english: "stack",
+        turkish: "yığın",
+        example: "There is a stack of books.",
+        imgSrc: "https://source.unsplash.com/featured/?stack-books",
+      },
+      {
+        english: "last",
+        turkish: "son",
+        example: "This is the last page.",
+        imgSrc: "https://source.unsplash.com/featured/?last-page",
+      },
+      {
+        english: "sometimes",
+        turkish: "bazen",
+        example: "I sometimes drink tea.",
+        imgSrc: "https://source.unsplash.com/featured/?thinking",
+      },
+      {
+        english: "never",
+        turkish: "asla",
+        example: "I never smoke.",
+        imgSrc: "https://source.unsplash.com/featured/?no",
+      },
+      {
+        english: "always",
+        turkish: "her zaman",
+        example: "She always smiles.",
+        imgSrc: "https://source.unsplash.com/featured/?smile",
+      },
+      {
+        english: "bright",
+        turkish: "parlak",
+        example: "The sun is very bright today.",
+        imgSrc: "https://source.unsplash.com/featured/?bright-light",
+      },
+      {
+        english: "take",
+        turkish: "almak",
+        example: "Please take your bag with you.",
+        imgSrc: "https://source.unsplash.com/featured/?taking",
+      },
+    ],
+  }),
 ];
+
+const mergeMissingSeedLessons = (lessons, seedLessons) => {
+  const lessonNames = new Set((lessons || []).map((lesson) => lesson.name));
+  const missingSeedLessons = seedLessons.filter(
+    (lesson) => !lessonNames.has(lesson.name),
+  );
+
+  return [...(lessons || []), ...missingSeedLessons];
+};
 
 export const DataContext = createContext({
   colorPalette,
@@ -132,7 +428,10 @@ export function DataProvider({ children }) {
         const storedLessons = await AsyncStorage.getItem(LESSONS_STORAGE_KEY);
         const normalizedInitialLessons = normalizeLessons(initialLessons);
         const lessons = storedLessons
-          ? normalizeLessons(JSON.parse(storedLessons))
+          ? mergeMissingSeedLessons(
+              normalizeLessons(JSON.parse(storedLessons)),
+              normalizedInitialLessons,
+            )
           : normalizedInitialLessons;
 
         if (!storedLessons) {

@@ -392,14 +392,11 @@ export default function ExamScreen({ navigation, route }) {
     const average = getAverageScore();
     const now = Date.now();
     const examKey = direction === "enToTr" ? "enToTrExams" : "trToEnExams";
-    const dateKey =
-      direction === "enToTr" ? "enToTrLastExamDate" : "trToEnLastExamDate";
     const pointsKey =
       direction === "enToTr" ? "fromEnToTrPoints" : "fromTrToEnPoints";
 
     updateLesson(lesson.id, (previousLesson) => ({
       ...previousLesson,
-      [dateKey]: now,
       [examKey]: [
         ...(previousLesson[examKey] || []),
         { date: now, point: average },

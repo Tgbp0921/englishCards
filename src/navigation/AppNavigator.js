@@ -8,6 +8,7 @@ import { DataContext } from "../../context/DataContext";
 import ExamScreen from "../screens/exam/ExamScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LessonsScreen from "../screens/lessons/LessonsScreen";
+import StudyScreen from "../screens/study/StudyScreen";
 
 const Stack = createNativeStackNavigator();
 const LESSONS_STORAGE_KEY = "lessons";
@@ -88,6 +89,13 @@ export default function AppNavigator() {
                 text="sınav"
                 palette={palette}
               />
+              <HeaderButton
+                navigation={navigation}
+                navigate="study"
+                icon="create-outline"
+                text="Çalışma"
+                palette={palette}
+              />
             </>
           ),
         })}
@@ -113,6 +121,14 @@ export default function AppNavigator() {
           component={ExamScreen}
           options={{
             headerShown: false,
+            animation: "fade",
+          }}
+        />
+        <Stack.Screen
+          name="study"
+          component={StudyScreen}
+          options={{
+            title: "",
             animation: "fade",
           }}
         />
