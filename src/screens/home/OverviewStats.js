@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import AnimatedPanel from "./AnimatedPanel";
 import { getScoreColor } from "./homeStats";
 
@@ -12,13 +12,42 @@ const items = [
   { key: "lastStudy", label: "Son Calisma", icon: "time-outline" },
 ];
 
+function AnimatedNumber({ color, value }) {
+  const numericValue = Number(value) || 0;
+  const progress = useRef(new Animated.Value(0)).current;
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    const listenerId = progress.addListener(({ value: animatedValue }) => {
+      setDisplayValue(Math.round(animatedValue));
+    });
+
+    progress.setValue(0);
+    Animated.timing(progress, {
+      toValue: numericValue,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+
+    return () => {
+      progress.removeListener(listenerId);
+    };
+  }, [numericValue, progress]);
+
+  return <Text style={[styles.value, { color }]}>{displayValue}</Text>;
+}
+
 export default function OverviewStats({ data, palette }) {
   return (
     <AnimatedPanel delay={40}>
       <View style={styles.grid}>
         {items.map((item) => {
           const isAverage = item.key === "overallAverage";
+          const isNumeric = item.key !== "lastStudy";
           const value = data[item.key];
+          const valueColor = isAverage
+            ? getScoreColor(Number(value) || 0, palette)
+            : palette.app.text;
 
           return (
             <View
@@ -43,18 +72,13 @@ export default function OverviewStats({ data, palette }) {
               <Text style={[styles.label, { color: palette.app.mutedText }]}>
                 {item.label}
               </Text>
-              <Text
-                style={[
-                  styles.value,
-                  {
-                    color: isAverage
-                      ? getScoreColor(Number(value) || 0, palette)
-                      : palette.app.text,
-                  },
-                ]}
-              >
-                {value}
-              </Text>
+              {isNumeric ? (
+                <AnimatedNumber color={valueColor} value={value} />
+              ) : (
+                <Text style={[styles.value, { color: valueColor }]}>
+                  {value}
+                </Text>
+              )}
             </View>
           );
         })}
