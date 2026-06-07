@@ -8,19 +8,30 @@ import { DataContext } from "../../context/DataContext";
 import ExamScreen from "../screens/exam/ExamScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LessonsScreen from "../screens/lessons/LessonsScreen";
+import ListScreen from "../screens/list/ListScreen";
 import StudyScreen from "../screens/study/StudyScreen";
 
 const Stack = createNativeStackNavigator();
 const LESSONS_STORAGE_KEY = "lessons";
 
-const HeaderButton = ({ navigation, navigate, icon, text, palette }) => (
+const HeaderButton = ({
+  navigation,
+  navigate,
+  icon,
+  text,
+  palette,
+  isActive,
+  side = "left",
+}) => (
   <View
     style={{
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
       marginLeft: 10,
+      marginRight: side === "right" ? 10 : 0,
       gap: 2,
+      transform: [{ translateY: isActive ? 3 : 0 }],
     }}
   >
     <TouchableOpacity onPress={() => navigation.navigate(navigate)}>
@@ -29,7 +40,8 @@ const HeaderButton = ({ navigation, navigate, icon, text, palette }) => (
     <Text
       style={{
         color: palette.white.base,
-        fontSize: 12,
+        fontSize: 10,
+        fontWeight: "900",
       }}
     >
       {text}
@@ -58,7 +70,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={({ navigation }) => ({
+        screenOptions={({ navigation, route }) => ({
           headerStyle: {
             backgroundColor: palette.app.primary,
           },
@@ -81,22 +93,36 @@ export default function AppNavigator() {
                 icon="home-outline"
                 text="Anasayfa"
                 palette={palette}
+                isActive={route.name === "Home"}
               />
               <HeaderButton
                 navigation={navigation}
                 navigate="lessons"
                 icon="book-outline"
-                text="sınav"
+                text="Sinav"
                 palette={palette}
+                isActive={route.name === "lessons"}
               />
               <HeaderButton
                 navigation={navigation}
                 navigate="study"
                 icon="create-outline"
-                text="Çalışma"
+                text="Calisma"
                 palette={palette}
+                isActive={route.name === "study"}
               />
             </>
+          ),
+          headerRight: () => (
+            <HeaderButton
+              navigation={navigation}
+              navigate="list"
+              icon="settings-outline"
+              text="Ayarlar"
+              palette={palette}
+              isActive={route.name === "list"}
+              side="right"
+            />
           ),
         })}
       >
@@ -127,6 +153,14 @@ export default function AppNavigator() {
         <Stack.Screen
           name="study"
           component={StudyScreen}
+          options={{
+            title: "",
+            animation: "fade",
+          }}
+        />
+        <Stack.Screen
+          name="list"
+          component={ListScreen}
           options={{
             title: "",
             animation: "fade",

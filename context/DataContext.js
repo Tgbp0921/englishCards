@@ -39,13 +39,17 @@ const getFallbackMedia = (english) =>
   fallbackMediaByEnglish[String(english || "").toLocaleLowerCase("en-US")] || {};
 
 const normalizeCard = (card) => {
-  const { fromEnToTr, fromTrToEn, ...cardWithoutOldStats } = card;
+  const {
+    englishSound,
+    exampleSound,
+    fromEnToTr,
+    fromTrToEn,
+    ...cardWithoutOldStats
+  } = card;
   const fallbackMedia = getFallbackMedia(card.english);
 
   return {
     ...cardWithoutOldStats,
-    englishSound: isBrokenSeedUrl(card.englishSound) ? "" : card.englishSound,
-    exampleSound: isBrokenSeedUrl(card.exampleSound) ? "" : card.exampleSound,
     imgSrc: isBrokenSeedUrl(card.imgSrc)
       ? fallbackMedia.imgSrc || ""
       : card.imgSrc,
@@ -76,8 +80,6 @@ const createSeedCard = ({ english, turkish, example, imgSrc }) => ({
   english,
   turkish,
   example,
-  exampleSound: "",
-  englishSound: "",
   imgSrc,
   fromEnToTrPoints: [],
   fromTrToEnPoints: [],
@@ -105,8 +107,6 @@ const initialLessons = [
         english: "Hello",
         turkish: "Merhaba",
         example: "Hello, how are you?",
-        exampleSound: "",
-        englishSound: "",
         imgSrc: fallbackMediaByEnglish.hello.imgSrc,
         fromEnToTrPoints: [], //{ date: Date.now, point: 0 }
         fromTrToEnPoints: [], //{ date: Date.now, point: 0 }
@@ -116,8 +116,6 @@ const initialLessons = [
         english: "Goodbye",
         turkish: "Hoşçakal",
         example: "Goodbye, see you later!",
-        exampleSound: "",
-        englishSound: "",
         imgSrc: fallbackMediaByEnglish.goodbye.imgSrc,
         fromEnToTrPoints: [], //{ date: Date.now, point: 0 }
         fromTrToEnPoints: [], //{ date: Date.now, point: 0 }
@@ -127,8 +125,6 @@ const initialLessons = [
         english: "Thank you",
         turkish: "Teşekkür ederim",
         example: "Thank you for your help!",
-        exampleSound: "",
-        englishSound: "",
         imgSrc: fallbackMediaByEnglish["thank you"].imgSrc,
         fromEnToTrPoints: [], //{ date: Date.now, point: 0 }
         fromTrToEnPoints: [], //{ date: Date.now, point: 0 }
@@ -415,6 +411,10 @@ export const DataContext = createContext({
   loading: true,
   setAscncData: () => {},
   updateLesson: () => {},
+  updateCard: () => {},
+  deleteCard: () => {},
+  deleteLesson: () => {},
+  addLesson: () => {},
 });
 
 export function DataProvider({ children }) {
@@ -480,6 +480,60 @@ export function DataProvider({ children }) {
     }));
   }, []);
 
+  const updateCard = useCallback((lessonId, cardId, updater) => {
+    setAscncData((previousData) => ({
+      ...previousData,
+      lessons: (previousData.lessons || []).map((lesson) => {
+        if (lesson.id !== lessonId) {
+          return lesson;
+        }
+
+        return {
+          ...lesson,
+          cards: (lesson.cards || []).map((card) => {
+            if (card.id !== cardId) {
+              return card;
+            }
+
+            return typeof updater === "function" ? updater(card) : updater;
+          }),
+        };
+      }),
+    }));
+  }, []);
+
+  const deleteCard = useCallback((lessonId, cardId) => {
+    setAscncData((previousData) => ({
+      ...previousData,
+      lessons: (previousData.lessons || []).map((lesson) => {
+        if (lesson.id !== lessonId) {
+          return lesson;
+        }
+
+        return {
+          ...lesson,
+          cards: (lesson.cards || []).filter((card) => card.id !== cardId),
+        };
+      }),
+    }));
+  }, []);
+
+  const deleteLesson = useCallback((lessonId) => {
+    setAscncData((previousData) => ({
+      ...previousData,
+      lessons: (previousData.lessons || []).filter(
+        (lesson) => lesson.id !== lessonId,
+      ),
+    }));
+  }, []);
+
+  const addLesson = useCallback((lesson) => {
+    setAscncData((previousData) => ({
+      ...previousData,
+      lessons: [...(previousData.lessons || []), normalizeLesson(lesson)],
+    }));
+  }, []);
+
   const value = useMemo(
     () => ({
       colorPalette,
@@ -488,8 +542,20 @@ export function DataProvider({ children }) {
       loading,
       setAscncData,
       updateLesson,
+      updateCard,
+      deleteCard,
+      deleteLesson,
+      addLesson,
     }),
-    [ascncData, loading, updateLesson],
+    [
+      addLesson,
+      ascncData,
+      deleteCard,
+      deleteLesson,
+      loading,
+      updateCard,
+      updateLesson,
+    ],
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

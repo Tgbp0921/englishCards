@@ -11,6 +11,13 @@ const ranges = [
   { key: "day", label: "Son 1 gun", days: 1, icon: "time-outline" },
 ];
 
+const scoreRanges = [
+  { key: "great", label: "100-85", min: 85, max: 101 },
+  { key: "good", label: "85-70", min: 70, max: 85 },
+  { key: "mid", label: "70-50", min: 50, max: 70 },
+  { key: "low", label: "50-0", min: 0, max: 50 },
+];
+
 const getAllCardAttempts = (lessons) =>
   (lessons || []).flatMap((lesson) =>
     (lesson.cards || []).flatMap((card) => [
@@ -42,6 +49,44 @@ const hasLastThreeHighEnToTrScores = (card) => {
   );
 };
 
+const averagePoints = (points = []) => {
+  if (!points.length) {
+    return 0;
+  }
+
+  return Math.round(
+    points.reduce((sum, item) => sum + (item.point || 0), 0) / points.length,
+  );
+};
+
+const getOverallCardAverage = (card) =>
+  averagePoints([
+    ...(card.fromEnToTrPoints || []),
+    ...(card.fromTrToEnPoints || []),
+  ]);
+
+const getBucketCounts = (cards = []) =>
+  scoreRanges.map((range) => ({
+    ...range,
+    count: cards.filter((card) => {
+      const average = getOverallCardAverage(card);
+      return average >= range.min && average < range.max;
+    }).length,
+  }));
+
+const getScoreColor = (score, palette) => {
+  if (score < 50) {
+    return palette.score.low;
+  }
+  if (score < 70) {
+    return palette.score.medium;
+  }
+  if (score < 85) {
+    return palette.score.good;
+  }
+  return palette.score.excellent;
+};
+
 export default function HomeScreen() {
   const { ascncData, palette } = useContext(DataContext);
   const lessons = ascncData.lessons || [];
@@ -69,6 +114,7 @@ export default function HomeScreen() {
         id: lesson.id,
         name: lesson.name,
         cardCount: lesson.cards?.length || 0,
+        buckets: getBucketCounts(lesson.cards || []),
         highEnToTrCards: (lesson.cards || []).filter(
           hasLastThreeHighEnToTrScores,
         ).length,
@@ -78,7 +124,7 @@ export default function HomeScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: palette.app.background }]}>
-      <Text style={[styles.title, { color: palette.app.text }]}>Anasayfa</Text>
+      <Text style={[styles.title, { color: palette.app.text }]}>ANASAYFA</Text>
 
       <View style={styles.rangeGrid}>
         {summary.rangeStats.map((item) => (
@@ -177,15 +223,30 @@ export default function HomeScreen() {
                 {lesson.cardCount} kart
               </Text>
             </View>
-            <View style={styles.lessonMetric}>
-              <Ionicons
-                name="ribbon-outline"
-                size={18}
-                color={palette.score.excellent}
-              />
-              <Text style={[styles.lessonMetricText, { color: palette.app.mutedText }]}>
-                {lesson.highEnToTrCards} kelime 85+
-              </Text>
+            <View style={styles.bucketRow}>
+              {lesson.buckets.map((bucket) => (
+                <View
+                  key={bucket.key}
+                  style={[
+                    styles.bucket,
+                    { backgroundColor: palette.app.surfaceSoft },
+                  ]}
+                >
+                  <Text
+                    style={[styles.bucketLabel, { color: palette.app.mutedText }]}
+                  >
+                    {bucket.label}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.bucketValue,
+                      { color: getScoreColor(bucket.min, palette) },
+                    ]}
+                  >
+                    {bucket.count}
+                  </Text>
+                </View>
+              ))}
             </View>
           </View>
         ))}
@@ -201,8 +262,9 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   title: {
-    fontSize: 30,
+    fontSize: 15,
     fontWeight: "900",
+    textTransform: "uppercase",
   },
   rangeGrid: {
     flexDirection: "row",
@@ -269,8 +331,8 @@ const styles = StyleSheet.create({
     paddingRight: 18,
   },
   lessonCard: {
-    width: 176,
-    minHeight: 120,
+    width: 240,
+    minHeight: 142,
     borderRadius: 8,
     borderWidth: 1,
     padding: 12,
@@ -288,5 +350,24 @@ const styles = StyleSheet.create({
   lessonMetricText: {
     fontSize: 13,
     fontWeight: "800",
+  },
+  bucketRow: {
+    flexDirection: "row",
+    gap: 6,
+  },
+  bucket: {
+    flex: 1,
+    minHeight: 48,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bucketLabel: {
+    fontSize: 10,
+    fontWeight: "800",
+  },
+  bucketValue: {
+    fontSize: 18,
+    fontWeight: "900",
   },
 });

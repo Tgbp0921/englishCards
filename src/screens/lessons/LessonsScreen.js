@@ -109,6 +109,8 @@ export default function LessonsScreen({ navigation }) {
     navigation.navigate("Exam", {
       lessonId: selectedLesson.id,
       direction: selectedDirection,
+      returnRoute: "lessons",
+      returnIcon: "book-outline",
     });
     closeModal();
   };
@@ -141,7 +143,7 @@ export default function LessonsScreen({ navigation }) {
     <View
       style={[styles.container, { backgroundColor: palette.app.background }]}
     >
-      <Text style={[styles.title, { color: palette.app.text }]}>sınav</Text>
+      <Text style={[styles.title, { color: palette.app.text }]}>SINAV</Text>
 
       <View
         style={[
@@ -196,6 +198,11 @@ export default function LessonsScreen({ navigation }) {
                     style={[styles.lessonName, { color: palette.app.primary }]}
                   >
                     {item.name}
+                  </Text>
+                  <Text
+                    style={[styles.lessonStart, { color: palette.app.mutedText }]}
+                  >
+                    Basla
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -406,9 +413,10 @@ const styles = StyleSheet.create({
     padding: 18,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "800",
+    fontSize: 14,
+    fontWeight: "900",
     marginBottom: 18,
+    textTransform: "uppercase",
   },
   table: {
     borderRadius: 8,
@@ -455,6 +463,12 @@ const styles = StyleSheet.create({
   lessonName: {
     fontSize: 16,
     fontWeight: "800",
+  },
+  lessonStart: {
+    fontSize: 11,
+    fontWeight: "900",
+    textTransform: "uppercase",
+    marginTop: 2,
   },
   scoreCell: {
     fontSize: 18,

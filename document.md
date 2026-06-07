@@ -101,10 +101,37 @@ sınav bitiminde kullanıcıya en üstte toplam puan gösterilir. toplam puan t�
 derse tıklanınca yine en-tr tr-en seçimi olsun. exam sayfasındaki sınav sayfasının benzeri gelsin. burada soru sayısı gösterilmeyecek. kart gelecek ve cevaplanacak. puanı ve zamanı fromEnToTrPoints veya fromTrToEnPoints
 e kaydeilecek.
 
- her cevap sonrası arkada bir fonksiyon çalışsın ve son 5 sorunun ortalamaları karşılaştırılsın.
- en düşük olan cart ekrana gelsin. ama bir önceki kart gelmesin, aynı kart gelecekse puanı düşük diğer kart gelsin. yukarıda yine zaman gerisayım barı olsun. süre bitince 0 puan verilsin. soru bilinirse puanlama yine sınav sayfasındaki gibi olsun
- önceki sayfaya git butonu ve en->tr yazısı kalksın. hatta navigasyon görünmesin
-
-
+her cevap sonrası arkada bir fonksiyon çalışsın ve son 5 sorunun ortalamaları karşılaştırılsın.
+en düşük olan cart ekrana gelsin. ama bir önceki kart gelmesin, aynı kart gelecekse puanı düşük diğer kart gelsin. yukarıda yine zaman gerisayım barı olsun. süre bitince 0 puan verilsin. soru bilinirse puanlama yine sınav sayfasındaki gibi olsun
+önceki sayfaya git butonu ve en->tr yazısı kalksın. hatta navigasyon görünmesin
 
 4. karışık soru sayfası
+   bu sayfa için de navigasyon ve mixedScreen sayfası eklenir.
+
+ders select inputu. en üstte defaultta hepsi olacak. buradaki seçime göre aşagıdaki kelime sayısı max güncellenecek.
+
+radio inputu olur ve karışık / az bilinen / unutulan /
+
+kelime sayısı inputu select ile seçilir. min 1 max 30.
+
+3 ünden birini seçer ve projedeki bütün kelimelerde filtreleme yaparak kelime sayısı inputu adedi kadar kelime filtreler.
+
+az bilinen : son 3 ortalaması en düşük olanlar alınır
+unutulan : son cevapları en uzak olanlar
+karışık: az bilinen ve unutulan yarı yarıya veya birisi 1 fazla olarak kelimeleri filtrele
+
+aşagıda başla butonuna basınca aynı study sayfasının sınav sayfasında çalışmaya başla ve puanları güncelle
+
+5.uygulama çok hareketsiz kaldı. transitionlar ve animasyonlar lazım ki çocuklar sıkılmasın. doğru cevaplarda yeşil konfeti patlat ve heeyy sesi oynat, bilemezse de üzgün emoji kısaca fade gelsin gitsin 0.5 saniyede ve noo sesi çıksın. kullanıcı çocuk olacağı için sıkılmamalı. soru geçişleri slide şeklinde olsun. sınav sonu puanının arkasında puana göre kutlama üzülme animasyonları oynasın.
+
+6. kelime listesi sayfası. icon: yatay satırlar
+
+burada bütün kelimeler elle seçim akordionundaki gibi akordion içinde listelensin. seçim olmayacagı için seçim stunu kalksın. tabloda english / turkish / tr puanı (tıklayınca modalda bütün puanlar) / en puanı (tıklayınca modalda bütün puanlar), sil/düzenle iconları olsun. sile basınca bir confirm modalı ile eminmisin diye sorsun. edite basınca kelimenin sadece englis ve turkish yazımları değişebilmesi için modal açılsın. altta ok ve cancel butonları olsun. sil ve edit işlemleri hem context hem de asyncstorege de uygulansın.
+en tepede search inputu olsun. sadece yazma ile filtrelesin. search butonu istemiyorum
+
+elle seçim tabından sonra akordion açılınca gelen sıralama seçenekleri sütunlarının tam üzerinde olsun. hepsi solda olmasın.
+
+sesler
+kelime listesi
+anasayfa
+uı denemeleri
