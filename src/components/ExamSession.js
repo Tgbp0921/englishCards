@@ -24,7 +24,7 @@ import {
 } from "react-native";
 import { DataContext } from "../../context/DataContext";
 
-const CARD_SECONDS = 10;
+const CARD_SECONDS = 7;
 const RECOGNITION_LIMIT_MS = 4000;
 const RESULT_SETTLE_MS = 350;
 
@@ -149,11 +149,11 @@ const answersMatch = (givenAnswer, expectedAnswer) => {
 };
 
 const calculateScore = (elapsedSeconds) => {
-  if (elapsedSeconds <= 3) {
+  if (elapsedSeconds <= 2) {
     return 100;
   }
 
-  return Math.max(30, Math.round(100 - ((elapsedSeconds - 3) / 7) * 70));
+  return Math.max(30, Math.round(100 - ((elapsedSeconds - 2) / 5) * 70));
 };
 
 const getScoreColor = (score, palette) => {
@@ -738,6 +738,13 @@ export default function ExamScreen({ navigation, route }) {
 
   const goNext = () => {
     abortSpeechRecognition();
+    dispatchSessionUi({ type: "resetQuestion" });
+    setTranscriptText("");
+    setRecognitionError("");
+    latestTranscriptRef.current = "";
+    setRemaining(CARD_SECONDS);
+    timerBarProgressRef.current = 1;
+    timerBarProgress.setValue(1);
 
     if (currentIndex >= cards.length - 1) {
       if (isPracticeMode) {
@@ -1000,7 +1007,7 @@ export default function ExamScreen({ navigation, route }) {
                 onPressIn={startSpeechRecognition}
                 onPressOut={stopSpeechRecognitionAndCheck}
               >
-                <Ionicons name="mic" size={34} color={palette.black.base} />
+                <Ionicons name="mic" size={43} color={palette.black.base} />
               </TouchableOpacity>
             </Animated.View>
           </View>
@@ -1137,13 +1144,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   recordButtonShell: {
-    width: 76,
-    height: 76,
+    width: 95,
+    height: 95,
   },
   recordButton: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
+    width: 95,
+    height: 95,
+    borderRadius: 48,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -1154,7 +1161,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     position: "absolute",
-    bottom: 86,
+    bottom: 105,
     maxWidth: 300,
     paddingHorizontal: 10,
     paddingVertical: 5,

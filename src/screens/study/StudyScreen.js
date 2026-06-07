@@ -647,42 +647,82 @@ export default function StudyScreen({ navigation }) {
                       ]}
                     >
                       <View style={styles.sortRow}>
-                        {sortFields.map((field) => {
+                        {sortFields.map((field, fieldIndex) => {
                           const isSelected =
                             manualSortKey === field.ascKey ||
                             manualSortKey === field.descKey;
                           const isDesc = manualSortKey === field.descKey;
 
                           return (
-                            <TouchableOpacity
+                            <View
                               key={field.key}
-                              style={styles.sortButton}
-                              onPress={() => toggleManualSort(field)}
+                              style={
+                                fieldIndex === 0
+                                  ? styles.sortWordCell
+                                  : styles.sortScoreCell
+                              }
                             >
-                              <Text
-                                style={[
-                                  styles.sortText,
-                                  {
-                                    color: isSelected
-                                      ? palette.black.base
-                                      : "rgba(0, 0, 0, 0.34)",
-                                  },
-                                ]}
+                              <TouchableOpacity
+                                style={styles.sortButton}
+                                onPress={() => toggleManualSort(field)}
                               >
-                                {field.label}
-                              </Text>
-                              <Ionicons
-                                name={isDesc ? "arrow-up" : "arrow-down"}
-                                size={13}
-                                color={
-                                  isSelected
-                                    ? palette.black.base
-                                    : "rgba(0, 0, 0, 0.34)"
-                                }
-                              />
-                            </TouchableOpacity>
+                                <Text
+                                  style={[
+                                    styles.sortText,
+                                    {
+                                      color: isSelected
+                                        ? palette.black.base
+                                        : "rgba(0, 0, 0, 0.34)",
+                                    },
+                                  ]}
+                                >
+                                  {field.label}
+                                </Text>
+                                <Ionicons
+                                  name={isDesc ? "arrow-up" : "arrow-down"}
+                                  size={13}
+                                  color={
+                                    isSelected
+                                      ? palette.black.base
+                                      : "rgba(0, 0, 0, 0.34)"
+                                  }
+                                />
+                              </TouchableOpacity>
+                            </View>
                           );
                         })}
+                        <View style={styles.selectionHeaderSpacer} />
+                      </View>
+
+                      <View style={styles.wordHeaderRow}>
+                        <Text
+                          style={[
+                            styles.wordHeaderText,
+                            styles.wordHeaderCell,
+                            { color: palette.app.mutedText },
+                          ]}
+                        >
+                          Kelime
+                        </Text>
+                        <Text
+                          style={[
+                            styles.wordHeaderText,
+                            styles.scoreHeaderText,
+                            { color: palette.app.mutedText },
+                          ]}
+                        >
+                          En puani
+                        </Text>
+                        <Text
+                          style={[
+                            styles.wordHeaderText,
+                            styles.scoreHeaderText,
+                            { color: palette.app.mutedText },
+                          ]}
+                        >
+                          Tr puani
+                        </Text>
+                        <View style={styles.selectionHeaderSpacer} />
                       </View>
 
                       {getSortedCards(lesson.cards || []).map((card, index) => {
@@ -749,7 +789,7 @@ export default function StudyScreen({ navigation }) {
                                   { color: palette.app.mutedText },
                                 ]}
                               >
-                                En {getEnScore(card)}
+                                {getEnScore(card)}
                               </Text>
                               <Text
                                 style={[
@@ -757,7 +797,7 @@ export default function StudyScreen({ navigation }) {
                                   { color: palette.app.mutedText },
                                 ]}
                               >
-                                Tr {getTrScore(card)}
+                                {getTrScore(card)}
                               </Text>
                               <Ionicons
                                 name={
@@ -1037,9 +1077,17 @@ const styles = StyleSheet.create({
     minHeight: 30,
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    paddingHorizontal: 2,
+    gap: 5,
+    paddingHorizontal: 6,
     paddingVertical: 3,
+  },
+  sortWordCell: {
+    flex: 1,
+    alignItems: "flex-start",
+  },
+  sortScoreCell: {
+    width: 56,
+    alignItems: "center",
   },
   sortButton: {
     minHeight: 24,
@@ -1051,6 +1099,28 @@ const styles = StyleSheet.create({
   sortText: {
     fontSize: 11,
     fontWeight: "900",
+  },
+  wordHeaderRow: {
+    minHeight: 24,
+    paddingHorizontal: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  wordHeaderText: {
+    fontSize: 10,
+    fontWeight: "900",
+    textTransform: "uppercase",
+  },
+  wordHeaderCell: {
+    flex: 1,
+  },
+  scoreHeaderText: {
+    width: 56,
+    textAlign: "center",
+  },
+  selectionHeaderSpacer: {
+    width: 22,
   },
   wordRow: {
     minHeight: 34,
@@ -1068,7 +1138,7 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   scoreText: {
-    width: 42,
+    width: 56,
     fontSize: 11,
     fontWeight: "900",
     textAlign: "center",
