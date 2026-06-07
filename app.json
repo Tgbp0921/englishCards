@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "MyApp2",
+    "name": "Feyza-Kelime",
     "slug": "MyApp2",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/feyza-icon.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
@@ -15,10 +15,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#3454D1",
+        "foregroundImage": "./assets/feyza-android-foreground.png",
+        "backgroundImage": "./assets/feyza-android-background.png",
+        "monochromeImage": "./assets/feyza-android-monochrome.png"
       },
       "package": "com.birolaygun.MyApp2",
       "permissions": [
@@ -26,7 +26,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/feyza-favicon.png"
     },
     "plugins": [
       [

@@ -25,6 +25,174 @@ const fallbackMediaByEnglish = {
     imgSrc:
       "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=900&auto=format&fit=crop",
   },
+  say: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&auto=format&fit=crop",
+  },
+  think: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1493612276216-ee3925520721?w=900&auto=format&fit=crop",
+  },
+  "my week": {
+    imgSrc:
+      "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=900&auto=format&fit=crop",
+  },
+  early: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1494548162494-384bba4ab999?w=900&auto=format&fit=crop",
+  },
+  often: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1506784365847-bbad939e9335?w=900&auto=format&fit=crop",
+  },
+  grew: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=900&auto=format&fit=crop",
+  },
+  before: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=900&auto=format&fit=crop",
+  },
+  keep: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&auto=format&fit=crop",
+  },
+  prediction: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&auto=format&fit=crop",
+  },
+  survey: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop",
+  },
+  environment: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6?w=900&auto=format&fit=crop",
+  },
+  box: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=900&auto=format&fit=crop",
+  },
+  vegetable: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop",
+  },
+  bowl: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1547592180-85f173990554?w=900&auto=format&fit=crop",
+  },
+  bottle: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=900&auto=format&fit=crop",
+  },
+  cheese: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=900&auto=format&fit=crop",
+  },
+  "what kind": {
+    imgSrc:
+      "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=900&auto=format&fit=crop",
+  },
+  pear: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?w=900&auto=format&fit=crop",
+  },
+  sauce: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=900&auto=format&fit=crop",
+  },
+  sweet: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=900&auto=format&fit=crop",
+  },
+  sack: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1506617420156-8e4536971650?w=900&auto=format&fit=crop",
+  },
+  big: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&auto=format&fit=crop",
+  },
+  "the biggest": {
+    imgSrc:
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&auto=format&fit=crop",
+  },
+  mistake: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&auto=format&fit=crop",
+  },
+  poetry: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900&auto=format&fit=crop",
+  },
+  rhyme: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&auto=format&fit=crop",
+  },
+  competition: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&auto=format&fit=crop",
+  },
+  acrostic: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900&auto=format&fit=crop",
+  },
+  wing: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&auto=format&fit=crop",
+  },
+  letter: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1513258496099-48168024aec0?w=900&auto=format&fit=crop",
+  },
+  line: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&auto=format&fit=crop",
+  },
+  spell: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=900&auto=format&fit=crop",
+  },
+  "connected to": {
+    imgSrc:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&auto=format&fit=crop",
+  },
+  "a bag of": {
+    imgSrc:
+      "https://images.unsplash.com/photo-1542838132-92c53300491e?w=900&auto=format&fit=crop",
+  },
+  "want to": {
+    imgSrc:
+      "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=900&auto=format&fit=crop",
+  },
+  stack: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&auto=format&fit=crop",
+  },
+  last: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=900&auto=format&fit=crop",
+  },
+  sometimes: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1493612276216-ee3925520721?w=900&auto=format&fit=crop",
+  },
+  never: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1516962126636-27ad087061cc?w=900&auto=format&fit=crop",
+  },
+  always: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=900&auto=format&fit=crop",
+  },
+  bright: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1494548162494-384bba4ab999?w=900&auto=format&fit=crop",
+  },
+  take: {
+    imgSrc:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop",
+  },
 };
 
 const normalizePointHistory = (points) =>
@@ -33,7 +201,8 @@ const normalizePointHistory = (points) =>
     : [{ date: Date.now(), point: 0 }];
 
 const isBrokenSeedUrl = (url) =>
-  typeof url === "string" && url.includes("your-cdn.com");
+  typeof url === "string" &&
+  (url.includes("your-cdn.com") || url.includes("source.unsplash.com"));
 
 const getFallbackMedia = (english) =>
   fallbackMediaByEnglish[String(english || "").toLocaleLowerCase("en-US")] || {};

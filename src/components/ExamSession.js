@@ -4,7 +4,14 @@ import {
   ExpoSpeechRecognitionModule,
   useSpeechRecognitionEvent,
 } from "expo-speech-recognition";
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   Animated,
@@ -20,6 +27,51 @@ import { DataContext } from "../../context/DataContext";
 const CARD_SECONDS = 10;
 const RECOGNITION_LIMIT_MS = 4000;
 const RESULT_SETTLE_MS = 350;
+
+const getSessionPhase = (state) => {
+  if (state.isFinished) {
+    return "finished";
+  }
+  if (state.isRevealed) {
+    return "revealed";
+  }
+  if (state.isRecognizing) {
+    return "listening";
+  }
+  if (state.isChecking) {
+    return "checking";
+  }
+  return "question";
+};
+
+const initialSessionUi = {
+  isPaused: false,
+  isRevealed: false,
+  isFinished: false,
+  isChecking: false,
+  isRecognizing: false,
+  phase: "question",
+};
+
+const examSessionUiReducer = (state, action) => {
+  if (action.type === "resetQuestion") {
+    return initialSessionUi;
+  }
+
+  if (action.type === "set") {
+    const nextState = {
+      ...state,
+      [action.key]: action.value,
+    };
+
+    return {
+      ...nextState,
+      phase: getSessionPhase(nextState),
+    };
+  }
+
+  return state;
+};
 
 const shuffleCards = (cards) =>
   [...cards]
@@ -174,12 +226,11 @@ export default function ExamScreen({ navigation, route }) {
   const { ascncData, loading, palette, updateLesson } = useContext(DataContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [remaining, setRemaining] = useState(CARD_SECONDS);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isRevealed, setIsRevealed] = useState(false);
   const [results, setResults] = useState([]);
-  const [isFinished, setIsFinished] = useState(false);
-  const [isChecking, setIsChecking] = useState(false);
-  const [isRecognizing, setIsRecognizing] = useState(false);
+  const [sessionUi, dispatchSessionUi] = useReducer(
+    examSessionUiReducer,
+    initialSessionUi,
+  );
   const [transcriptText, setTranscriptText] = useState("");
   const [recognitionError, setRecognitionError] = useState("");
   const [timerVersion, setTimerVersion] = useState(0);
@@ -196,6 +247,21 @@ export default function ExamScreen({ navigation, route }) {
   const timerBarOpacity = useRef(new Animated.Value(1)).current;
   const timerBarProgress = useRef(new Animated.Value(1)).current;
   const timerBarProgressRef = useRef(1);
+  const {
+    isPaused,
+    isRevealed,
+    isFinished,
+    isChecking,
+    isRecognizing,
+  } = sessionUi;
+  const setSessionUiField = (key, value) =>
+    dispatchSessionUi({ type: "set", key, value });
+  const setIsPaused = (value) => setSessionUiField("isPaused", value);
+  const setIsRevealed = (value) => setSessionUiField("isRevealed", value);
+  const setIsFinished = (value) => setSessionUiField("isFinished", value);
+  const setIsChecking = (value) => setSessionUiField("isChecking", value);
+  const setIsRecognizing = (value) =>
+    setSessionUiField("isRecognizing", value);
 
   const isMixedExam = Array.isArray(mixedCardRefs) && mixedCardRefs.length > 0;
 
@@ -262,9 +328,7 @@ export default function ExamScreen({ navigation, route }) {
     setCards(nextCards);
     setCurrentIndex(0);
     setResults([]);
-    setIsFinished(false);
-    setIsRevealed(false);
-    setIsPaused(false);
+    dispatchSessionUi({ type: "resetQuestion" });
     setPracticeRound(0);
     setRemaining(CARD_SECONDS);
     setTranscriptText("");
@@ -414,8 +478,7 @@ export default function ExamScreen({ navigation, route }) {
     setTranscriptText("");
     setRecognitionError("");
     latestTranscriptRef.current = "";
-    setIsPaused(false);
-    setIsRevealed(false);
+    dispatchSessionUi({ type: "resetQuestion" });
     if (direction === "enToTr") {
       speakEnglish(currentCard.english);
     }
@@ -893,9 +956,7 @@ export default function ExamScreen({ navigation, route }) {
           {transcriptText}
         </Text>
       </View>
-      <View
-        style={{ height: 110, alignItems: "center", justifyContent: "center" }}
-      >
+      <View style={styles.bottomActionArea}>
         {!isRevealed ? (
           <View style={styles.answerArea}>
             <Animated.View
@@ -947,6 +1008,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  bottomActionArea: {
+    height: 110,
+    alignItems: "center",
+    justifyContent: "center",
+    transform: [{ translateY: -35 }],
   },
   container: {
     flex: 1,
@@ -1001,6 +1068,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     minHeight: 280,
+    marginBottom: 25,
     borderRadius: 8,
     borderWidth: 1,
     alignItems: "center",
