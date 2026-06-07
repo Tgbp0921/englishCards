@@ -6,7 +6,7 @@ import React, { useContext } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { DataContext } from "../../context/DataContext";
 import ExamScreen from "../screens/exam/ExamScreen";
-import HomeScreen from "../screens/HomeScreen";
+import HomeScreen from "../screens/home/HomeScreen";
 import LessonsScreen from "../screens/lessons/LessonsScreen";
 import ListScreen from "../screens/list/ListScreen";
 import StudyScreen from "../screens/study/StudyScreen";

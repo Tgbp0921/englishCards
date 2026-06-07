@@ -45,7 +45,16 @@ document.md
 context/DataContext.js
 src/navigation/AppNavigator.js
 src/components/ExamSession.js
-src/screens/HomeScreen.js
+src/screens/home/HomeScreen.js
+src/screens/home/AnimatedBar.js
+src/screens/home/AnimatedPanel.js
+src/screens/home/DirectionComparison.js
+src/screens/home/FocusWords.js
+src/screens/home/LessonReport.js
+src/screens/home/OverviewStats.js
+src/screens/home/ScoreDistribution.js
+src/screens/home/TimeSummary.js
+src/screens/home/homeStats.js
 src/screens/lessons/LessonsScreen.js
 src/screens/exam/ExamScreen.js
 src/screens/study/StudyScreen.js
@@ -67,16 +76,16 @@ Context icinde saglanan degerler:
 
 ```js
 {
-  (colorPalette,
-    palette,
-    ascncData,
-    loading,
-    setAscncData,
-    updateLesson,
-    updateCard,
-    deleteCard,
-    deleteLesson,
-    addLesson);
+  colorPalette,
+  palette,
+  ascncData,
+  loading,
+  setAscncData,
+  updateLesson,
+  updateCard,
+  deleteCard,
+  deleteLesson,
+  addLesson
 }
 ```
 
@@ -180,15 +189,22 @@ Header:
 
 ## Anasayfa
 
-Dosya: `src/screens/HomeScreen.js`
+Dosya: `src/screens/home/HomeScreen.js`
 
-Anasayfa genel istatistikleri gosterir:
+Anasayfa rapor ekrani olarak calisir ve `src/screens/home` klasorundeki parcalara ayrilmistir.
 
-- Son 1 ay / son 1 hafta / son 1 gun deneme sayilari
-- Dogru ve yanlis cevap adetleri
-- Toplam kart sayisi
-- Son 3 En-Tr denemesi 85+ olan kart sayisi
-- Ders bazli kart sayilari ve puan araligi dagilimlari
+Bilesenler:
+
+- `OverviewStats`: Toplam kelime, toplam ders, toplam deneme, genel ortalama ve son calisma.
+- `TimeSummary`: Son 1 gun / son 1 hafta / son 1 ay cevap, dogru, yanlis ve ortalama puan ozeti.
+- `LessonReport`: Ders, kelime sayisi, En-Tr, Tr-En, ortalama ve zayif kelime sayisi tablosu.
+- `ScoreDistribution`: 0-49, 50-69, 70-84, 85-100 puan dagilimi.
+- `FocusWords`: En zayif kelimeler ve en uzun suredir calisilmayan kelimeler.
+- `DirectionComparison`: En-Tr ve Tr-En genel ortalama karsilastirmasi.
+
+Grafik barlari 1 saniye icinde 0'dan hedef seviyeye animasyonla dolar. Rapor kartlari acilista hafif fade/slide animasyonu ile gelir.
+
+`FocusWords` icindeki kartlar tiklanabilir. `Basla` ile En-Tr yonunde sadece o kelimelerden olusan calisma oturumu baslatilir.
 
 ## Sinav Ekrani
 
@@ -234,7 +250,12 @@ Oturum state'i `useReducer` ile yonetilir:
 
 ```js
 {
-  (isPaused, isRevealed, isFinished, isChecking, isRecognizing, phase);
+  isPaused,
+  isRevealed,
+  isFinished,
+  isChecking,
+  isRecognizing,
+  phase
 }
 ```
 
@@ -444,153 +465,3 @@ Telefon loglari icin:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-eskisi:
-data yapısı:
-
-bütün data asyncStorage de tutulacak.
-
-bir DataContext oluşturulacak ve bütün proje sarmallanacak. context içinde palette.js den alınan colorPalette şu şekilde olacak {colorPalette:colorPalette}
-
-uygulama açılınca önce asyncStorage.get(lessons) deki veri alınacak ve context içine eklenecek. şu şekilde {colorPalette:colorPalette, ascncData:asyncStorage.get(lessons)} context.ascncData içindeki veri her değiştiğinde asyncStorage de güncellenecek.
-
-asyncstoraga da başlangıç datası: lessons:[ {
-
-name: "1. ders",
-date: 1780691558047, //console.log(new Date().getTime());
-id: Math.random(),
-enToTrPoint:0,
-enToTrExams:[{date:1780691558047, point:50}]
-trToEnExams:[{date:1780691558047, point:30}]
-trToEnPoint:0,
-cards: [
-{
-id: Math.random(),
-english: "Hello",
-turkish: "Merhaba",
-example: "Hello, how are you?",
-exampleSound:
-"https://your-cdn.com/audio/examples/hello-how-are-you.mp3",
-englishSound:
-"https://your-cdn.com/audio/words/hello.mp3",
-imgSrc:
-"https://your-cdn.com/images/hello.jpg",
-fromEnToTrPoints: [{date:Date.now , point:0}] ,
-fromTrToEnPoints: [{date:Date.now , point:0}],
-},
-{
-id: Math.random(),
-english: "Goodbye",
-turkish: "Hoşçakal",
-example: "Goodbye, see you later!",
-exampleSound:
-"https://your-cdn.com/audio/examples/goodbye-see-you-later.mp3",
-englishSound:
-"https://your-cdn.com/audio/words/goodbye.mp3",
-imgSrc:
-"https://your-cdn.com/images/goodbye.jpg",
-fromEnToTrPoints: [{date:Date.now , point:0}] ,
-fromTrToEnPoints: [{date:Date.now , point:0}],
-},
-{
-id: Math.random(),
-english: "Thank you",
-turkish: "Teşekkür ederim",
-example: "Thank you for your help!",
-exampleSound:
-"https://your-cdn.com/audio/examples/thank-you-for-your-help.mp3",
-englishSound:
-"https://your-cdn.com/audio/words/thank-you.mp3",
-imgSrc:
-"https://your-cdn.com/images/thank-you.jpg",
-fromEnToTrPoints: [{date:Date.now , point:0}] ,
-fromTrToEnPoints: [{date:Date.now , point:0}],
-},
-];
-},
-
-]
-
-asyncStorage de data yoksa yukarıdaki datayı ekle.
-
----
-
-projede bütün style renk seçimleri context.palette üzerinden çekilecek.
-
-sınav sayfası:
-
-lessons klasörü olustur ve LessonsScreen.js oraya taşı.
-
-context içinden lessons çelikir ve burada map edilerek tablo şeklinde sıralanır.en üstte ilk olusturulan ders vardır. tabloda ilk stunda dersin adı vardır. 2. stunda enToTrPoint, 3. sırada trToEnPoint vardır. puanlar 0-50 arası kırmızı, 50-70 arası mavi, 70-85 arası açık yeş,l, 85-100 arası koyu yeşille yazılır. bu renkler palette yok. oraya ekle ve oradan çek.
-
-tabloda ders adına basılınca confirm modülü aç ve sınava başlansın mı diye sorsun. modalda üst tarafta ingilizce -> türkçe veya türkçe -> ingilizce diye radio select olsun. hayır derse modal kapatılsın. evet derse sınav(nasıl olacagı ileride anlatılacak) başlasın.
-
-sınav ekranı:
-teni bir navigasyon sayfası oluşturulsun. Exam diye
-backgroun değişsin ve navigasyon kalksın. sadece sağ üst tarafta çıkış için icon olsun ve home a navigate etsin.
-
-şimdi ingilizce -> türkçe seçilmiş halini yazıyorum:
-
-sınavda cards içindekiler karışık bir sıra ile sorulsun. 1 kere sorulan tekrar sorulmadan her kelime 1 kere sorulsun. ekranda 1 kart olsun ve üzerinde o kartın english kelimesi yazsın. kart açılınca 10 saniyelik geri sayım başlasın. varsa eğer englishSound oynatılsın. aşağıda ses kaydetme butonu olsun ve 4 saniye ile sınırlı olarak ses kaydı alsın. ses kaydına kelimenin türkçe karşılığını söylemesi bekleniyor. sesi yazıya çevir ve turkish ile karşılaştır. sonuç doğru ise kartı ters çevir ve en üste turkish, altına example ve onun altına da varsa imgSrc. kart açılınca vrsa exampleSound oynat. doğru bildiği için kartın fromEnToTr correct sayısını 1 arttır.
-
-ses kaydına bastıgı anda sure duraklasın ve dogru - yanlış kontrolü yapıldıktan sonra cevap yanlıssa süre akmaya devam etsin.
-her sorulan cart için puanlama yapılsın. bilinemeyenler 0 puan, 0-3 saniye içinde bilinenler 100 puan. 3-10 saniye aralıgında ise 100 - 30 arası puan bir fonksiyon ile hesaplanarak verilir ve useState ile elde tutulur.
-
-verdiği cevap yanlışsa süre bitmediyse tekrar ses kaydı alarak cevaplama hakkı olsun. 10 saniye doldugunda kart kendi kendine açılsın. en üste turkish, altına example ve onun altına da varsa imgSrc. kart açılınca vrsa exampleSound oynat. yanlıs oldugu için wrong 1 arttır.
-
-sınav sırasında bir çubuk bar üzerinde ne kadar kart oldugunu ve ne kadar ilerlediğini göster. bilemediği soruların kutuları kırmızıdır. uanlar 0-50 arası kırmızı, 50-70 arası mavi, 70-85 arası açık yeşil, 85-100 arası koyu yeşille yazılır. bu renkler palette olacak oradan çek.
-
-sınav bitiminde kullanıcıya en üstte toplam puan gösterilir. toplam puan tün soruların ortalamasıdır. altta kelimeler map edilerek en -> tr yanında kaça puan aldıkları yazılır. burada veriler async ve context e eklenir. enToTrLastExamDate date.now olacak. ekranda anamenü ikonu olur ve home navigate edilir.
-
----
-
-3. sayfa navigasyon içinde kalem ile göster altında da Çalışma yazsın. diğerlerinin kullandığı componentle yap. navigate adresi study olsun. studyScreen.js oluştur. içinde dersler map edilsin, tablo gibi olmasın üstte dersin adı ve toplam kelime sayısı, altta da puanlar 0-50 arası , 50-70 arası , 70-85 arası, 85-100 arası olarak kelime sayıları yazsın,
-
-derse tıklanınca yine en-tr tr-en seçimi olsun. exam sayfasındaki sınav sayfasının benzeri gelsin. burada soru sayısı gösterilmeyecek. kart gelecek ve cevaplanacak. puanı ve zamanı fromEnToTrPoints veya fromTrToEnPoints
-e kaydeilecek.
-
-her cevap sonrası arkada bir fonksiyon çalışsın ve son 5 sorunun ortalamaları karşılaştırılsın.
-en düşük olan cart ekrana gelsin. ama bir önceki kart gelmesin, aynı kart gelecekse puanı düşük diğer kart gelsin. yukarıda yine zaman gerisayım barı olsun. süre bitince 0 puan verilsin. soru bilinirse puanlama yine sınav sayfasındaki gibi olsun
-önceki sayfaya git butonu ve en->tr yazısı kalksın. hatta navigasyon görünmesin
-
-4. karışık soru sayfası
-   bu sayfa için de navigasyon ve mixedScreen sayfası eklenir.
-
-ders select inputu. en üstte defaultta hepsi olacak. buradaki seçime göre aşagıdaki kelime sayısı max güncellenecek.
-
-radio inputu olur ve karışık / az bilinen / unutulan /
-
-kelime sayısı inputu select ile seçilir. min 1 max 30.
-
-3 ünden birini seçer ve projedeki bütün kelimelerde filtreleme yaparak kelime sayısı inputu adedi kadar kelime filtreler.
-
-az bilinen : son 3 ortalaması en düşük olanlar alınır
-unutulan : son cevapları en uzak olanlar
-karışık: az bilinen ve unutulan yarı yarıya veya birisi 1 fazla olarak kelimeleri filtrele
-
-aşagıda başla butonuna basınca aynı study sayfasının sınav sayfasında çalışmaya başla ve puanları güncelle
-
-5.uygulama çok hareketsiz kaldı. transitionlar ve animasyonlar lazım ki çocuklar sıkılmasın. doğru cevaplarda yeşil konfeti patlat ve heeyy sesi oynat, bilemezse de üzgün emoji kısaca fade gelsin gitsin 0.5 saniyede ve noo sesi çıksın. kullanıcı çocuk olacağı için sıkılmamalı. soru geçişleri slide şeklinde olsun. sınav sonu puanının arkasında puana göre kutlama üzülme animasyonları oynasın.
-
-6. kelime listesi sayfası. icon: yatay satırlar
-
-burada bütün kelimeler elle seçim akordionundaki gibi akordion içinde listelensin. seçim olmayacagı için seçim stunu kalksın. tabloda english / turkish / tr puanı (tıklayınca modalda bütün puanlar) / en puanı (tıklayınca modalda bütün puanlar), sil/düzenle iconları olsun. sile basınca bir confirm modalı ile eminmisin diye sorsun. edite basınca kelimenin sadece englis ve turkish yazımları değişebilmesi için modal açılsın. altta ok ve cancel butonları olsun. sil ve edit işlemleri hem context hem de asyncstorege de uygulansın.
-en tepede search inputu olsun. sadece yazma ile filtrelesin. search butonu istemiyorum
-
-elle seçim tabından sonra akordion açılınca gelen sıralama seçenekleri sütunlarının tam üzerinde olsun. hepsi solda olmasın.
-
-sesler
-anasayfa
-uı denemeleri
