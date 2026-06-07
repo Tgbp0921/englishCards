@@ -385,12 +385,12 @@ export default function ExamScreen({ navigation, route }) {
           Animated.timing(recordButtonOpacity, {
             toValue: 0.5,
             duration: 450,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(recordButtonOpacity, {
             toValue: 1,
             duration: 450,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
         ]),
       );
@@ -410,12 +410,12 @@ export default function ExamScreen({ navigation, route }) {
           Animated.timing(timerBarOpacity, {
             toValue: 0.25,
             duration: 220,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(timerBarOpacity, {
             toValue: 1,
             duration: 220,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
         ]),
       );
@@ -717,7 +717,28 @@ export default function ExamScreen({ navigation, route }) {
     }
   };
 
+  const abortSpeechRecognition = () => {
+    if (recognitionTimeoutRef.current) {
+      clearTimeout(recognitionTimeoutRef.current);
+      recognitionTimeoutRef.current = null;
+    }
+
+    releaseRequestedRef.current = false;
+    isStoppingRef.current = false;
+    isRecognizingRef.current = false;
+    setIsRecognizing(false);
+    setIsChecking(false);
+
+    try {
+      ExpoSpeechRecognitionModule.abort();
+    } catch (error) {
+      console.warn("Speech recognition could not be aborted.", error);
+    }
+  };
+
   const goNext = () => {
+    abortSpeechRecognition();
+
     if (currentIndex >= cards.length - 1) {
       if (isPracticeMode) {
         setPracticeRound((value) => value + 1);
@@ -959,6 +980,11 @@ export default function ExamScreen({ navigation, route }) {
       <View style={styles.bottomActionArea}>
         {!isRevealed ? (
           <View style={styles.answerArea}>
+            {recognitionError ? (
+              <Text style={[styles.errorText, { color: palette.score.low }]}>
+                {recognitionError}
+              </Text>
+            ) : null}
             <Animated.View
               style={[
                 styles.recordButtonShell,
@@ -977,11 +1003,6 @@ export default function ExamScreen({ navigation, route }) {
                 <Ionicons name="mic" size={34} color={palette.black.base} />
               </TouchableOpacity>
             </Animated.View>
-            {recognitionError ? (
-              <Text style={[styles.errorText, { color: palette.score.low }]}>
-                {recognitionError}
-              </Text>
-            ) : null}
           </View>
         ) : (
           <TouchableOpacity
@@ -1109,8 +1130,11 @@ const styles = StyleSheet.create({
   },
   answerArea: {
     alignItems: "center",
-    gap: 12,
+    justifyContent: "center",
     marginTop: 16,
+    minHeight: 110,
+    position: "relative",
+    width: "100%",
   },
   recordButtonShell: {
     width: 76,
@@ -1129,9 +1153,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   errorText: {
-    fontSize: 13,
+    position: "absolute",
+    bottom: 86,
+    maxWidth: 300,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.94)",
+    fontSize: 12,
     fontWeight: "800",
     textAlign: "center",
+    zIndex: 2,
   },
   nextButton: {
     alignSelf: "center",
