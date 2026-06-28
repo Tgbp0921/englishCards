@@ -131,6 +131,7 @@ export const buildHomeReport = (lessons = []) => {
       totalWords: cards.length,
       totalLessons: lessons.length,
       totalAttempts: allAttempts.length,
+      wrongAttempts: allAttempts.filter((item) => (item.point || 0) <= 0).length,
       overallAverage: average(allAttempts.map((item) => item.point || 0)),
       lastStudy: formatLastDate(latestAttemptDate),
     },

@@ -1,4 +1,4 @@
-# Feyza-Kelime Proje Dokumani
+<!-- # Feyza-Kelime Proje Dokumani
 
 Bu dokuman uygulamanin guncel mimarisini, ekranlarini, veri yapisini ve dikkat edilmesi gereken teknik notlari ozetler.
 
@@ -466,4 +466,4 @@ Telefon loglari icin:
 - Dogru cevaplarda sonraki butonuna kadar akan yesil konfeti eklendi.
 - Yanlis cevaplarda gorsel efekt gosterilmez.
 - Sure bitince beyaz kart alaninda 10-15 kirmizi kalp belirir ve catlama animasyonu yapar.
-- Soru kartlarina slide/fade giris animasyonu, sinav sonu puan ekranina puana gore hareketli arka efekt eklendi.
+- Soru kartlarina slide/fade giris animasyonu, sinav sonu puan ekranina puana gore hareketli arka efekt eklendi. -->

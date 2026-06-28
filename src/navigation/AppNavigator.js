@@ -1,9 +1,14 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useContext } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { DataContext } from "../../context/DataContext";
 import ExamScreen from "../screens/exam/ExamScreen";
 import HomeScreen from "../screens/home/HomeScreen";
@@ -12,7 +17,6 @@ import ListScreen from "../screens/list/ListScreen";
 import StudyScreen from "../screens/study/StudyScreen";
 
 const Stack = createNativeStackNavigator();
-const LESSONS_STORAGE_KEY = "lessons";
 
 const HeaderButton = ({
   navigation,
@@ -21,107 +25,83 @@ const HeaderButton = ({
   text,
   palette,
   isActive,
-  side = "left",
 }) => (
-  <View
-    style={{
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      marginLeft: 10,
-      marginRight: side === "right" ? 10 : 0,
-      gap: 2,
-      transform: [{ translateY: isActive ? 3 : 0 }],
-    }}
+  <TouchableOpacity
+    activeOpacity={0.82}
+    onPress={() => navigation.navigate(navigate)}
+    style={styles.headerButton}
   >
-    <TouchableOpacity onPress={() => navigation.navigate(navigate)}>
-      <Ionicons name={icon} size={24} color={palette.white.base} />
-    </TouchableOpacity>
+    <View style={[styles.headerIconBox, isActive && styles.headerIconBoxActive]}>
+      <Ionicons name={icon} size={20} color={palette.white.base} />
+    </View>
     <Text
-      style={{
-        color: palette.white.base,
-        fontSize: 10,
-        fontWeight: "900",
-      }}
+      style={[
+        styles.headerButtonText,
+        {
+          color: palette.white.base,
+        },
+      ]}
     >
       {text}
     </Text>
-  </View>
+  </TouchableOpacity>
+);
+
+const AppHeader = ({ navigation, palette, routeName }) => (
+  <ImageBackground
+    source={require("../../assets/ui-nav-gradient.png")}
+    resizeMode="cover"
+    style={styles.customHeader}
+  >
+    <View style={styles.headerNav}>
+      <HeaderButton
+        navigation={navigation}
+        navigate="Home"
+        icon="home-outline"
+        text="Anasayfa"
+        palette={palette}
+        isActive={routeName === "Home"}
+      />
+      <HeaderButton
+        navigation={navigation}
+        navigate="lessons"
+        icon="book-outline"
+        text="Dersler"
+        palette={palette}
+        isActive={routeName === "lessons"}
+      />
+      <HeaderButton
+        navigation={navigation}
+        navigate="study"
+        icon="bar-chart-outline"
+        text="İlerleme"
+        palette={palette}
+        isActive={routeName === "study"}
+      />
+      <HeaderButton
+        navigation={navigation}
+        navigate="list"
+        icon="settings-outline"
+        text="Ayarlar"
+        palette={palette}
+        isActive={routeName === "list"}
+      />
+    </View>
+  </ImageBackground>
 );
 
 export default function AppNavigator() {
-  const { ascncData, palette } = useContext(DataContext);
-
-  const logDataSources = async () => {
-    try {
-      const asyncLessons = await AsyncStorage.getItem(LESSONS_STORAGE_KEY);
-
-      console.log("CONTEXT DATA:", ascncData);
-      console.log(
-        "ASYNC STORAGE DATA:",
-        asyncLessons ? JSON.parse(asyncLessons) : null,
-      );
-    } catch (error) {
-      console.log("CONTEXT DATA:", ascncData);
-      console.warn("ASYNC STORAGE DATA could not be read:", error);
-    }
-  };
+  const { palette } = useContext(DataContext);
 
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={({ navigation, route }) => ({
-          headerStyle: {
-            backgroundColor: palette.app.primary,
-          },
-          headerTintColor: palette.white.base,
-          headerTitle: () => (
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={logDataSources}
-              style={{
-                width: 220,
-                height: 48,
-              }}
-            />
-          ),
-          headerLeft: () => (
-            <>
-              <HeaderButton
-                navigation={navigation}
-                navigate="Home"
-                icon="home-outline"
-                text="Anasayfa"
-                palette={palette}
-                isActive={route.name === "Home"}
-              />
-              <HeaderButton
-                navigation={navigation}
-                navigate="lessons"
-                icon="book-outline"
-                text="Sinav"
-                palette={palette}
-                isActive={route.name === "lessons"}
-              />
-              <HeaderButton
-                navigation={navigation}
-                navigate="study"
-                icon="create-outline"
-                text="Calisma"
-                palette={palette}
-                isActive={route.name === "study"}
-              />
-            </>
-          ),
-          headerRight: () => (
-            <HeaderButton
+          header: () => (
+            <AppHeader
               navigation={navigation}
-              navigate="list"
-              icon="settings-outline"
-              text="Ayarlar"
               palette={palette}
-              isActive={route.name === "list"}
-              side="right"
+              routeName={route.name}
             />
           ),
         })}
@@ -170,3 +150,46 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  customHeader: {
+    width: "100%",
+    height: 54,
+    overflow: "hidden",
+    boxSizing: "border-box",
+  },
+  headerNav: {
+    flex: 1,
+    width: "100%",
+    maxWidth: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 2,
+    boxSizing: "border-box",
+  },
+  headerButton: {
+    flex: 1,
+    minWidth: 0,
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 1,
+  },
+  headerIconBox: {
+    width: 34,
+    height: 26,
+    borderRadius: 13,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerIconBoxActive: {
+    backgroundColor: "rgba(255,255,255,0.18)",
+  },
+  headerButtonText: {
+    fontSize: 7,
+    fontWeight: "900",
+    maxWidth: "100%",
+    textAlign: "center",
+  },
+});

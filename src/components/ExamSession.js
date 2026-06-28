@@ -1,9 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Speech from "expo-speech";
-import {
-  ExpoSpeechRecognitionModule,
-  useSpeechRecognitionEvent,
-} from "expo-speech-recognition";
 import React, {
   useContext,
   useEffect,
@@ -23,6 +19,25 @@ import {
   View,
 } from "react-native";
 import { DataContext } from "../../context/DataContext";
+import { getPixabayImageSource } from "../data/pixabayImages";
+
+let ExpoSpeechRecognitionModule = null;
+let useSafeSpeechRecognitionEvent = () => {};
+
+try {
+  const speechRecognition = require("expo-speech-recognition");
+  ExpoSpeechRecognitionModule =
+    speechRecognition.ExpoSpeechRecognitionModule || null;
+  useSafeSpeechRecognitionEvent =
+    speechRecognition.useSpeechRecognitionEvent || useSafeSpeechRecognitionEvent;
+} catch (error) {
+  if (__DEV__) {
+    console.warn(
+      "Speech recognition native module is not available in this runtime.",
+      error?.message || error,
+    );
+  }
+}
 
 const CARD_SECONDS = 7;
 const RECOGNITION_LIMIT_MS = 4000;
@@ -326,6 +341,7 @@ export default function ExamScreen({ navigation, route }) {
   const currentCardKey = currentCard
     ? `${currentCard.lessonId}-${currentCard.id}`
     : "";
+  const currentCardImageSource = getPixabayImageSource(currentCard?.imgSrc);
   const questionText =
     direction === "enToTr" ? currentCard?.english : currentCard?.turkish;
   const answerTarget =
@@ -396,24 +412,26 @@ export default function ExamScreen({ navigation, route }) {
     sessionKey,
   ]);
 
-  useSpeechRecognitionEvent("start", () => {
+  const isSpeechRecognitionAvailable = Boolean(ExpoSpeechRecognitionModule);
+
+  useSafeSpeechRecognitionEvent("start", () => {
     isStartingRef.current = false;
     isRecognizingRef.current = true;
     setIsRecognizing(true);
   });
 
-  useSpeechRecognitionEvent("end", () => {
+  useSafeSpeechRecognitionEvent("end", () => {
     isRecognizingRef.current = false;
     setIsRecognizing(false);
   });
 
-  useSpeechRecognitionEvent("result", (event) => {
+  useSafeSpeechRecognitionEvent("result", (event) => {
     const transcript = event.results?.[0]?.transcript || "";
     latestTranscriptRef.current = transcript;
     setTranscriptText(transcript);
   });
 
-  useSpeechRecognitionEvent("error", (event) => {
+  useSafeSpeechRecognitionEvent("error", (event) => {
     const message = event.message || event.error || "Konusma tanima hatasi.";
     setRecognitionError(message);
     isStartingRef.current = false;
@@ -431,7 +449,7 @@ export default function ExamScreen({ navigation, route }) {
       if (resultSettleTimeoutRef.current) {
         clearTimeout(resultSettleTimeoutRef.current);
       }
-      ExpoSpeechRecognitionModule.abort();
+      ExpoSpeechRecognitionModule?.abort?.();
     };
   }, []);
 
@@ -772,6 +790,13 @@ export default function ExamScreen({ navigation, route }) {
       return;
     }
 
+    if (!ExpoSpeechRecognitionModule) {
+      setRecognitionError(
+        "Ses tanima Expo Go'da yok. APK veya development build ile calisir.",
+      );
+      return;
+    }
+
     if (!isRecognizingRef.current) {
       if (!isStartingRef.current) {
         return;
@@ -813,6 +838,13 @@ export default function ExamScreen({ navigation, route }) {
     const now = Date.now();
 
     if (!currentCard || isRecognizing || isChecking || now < nextMicAllowedAtRef.current) {
+      return;
+    }
+
+    if (!ExpoSpeechRecognitionModule) {
+      setRecognitionError(
+        "Ses tanima Expo Go'da yok. APK veya development build ile calisir.",
+      );
       return;
     }
 
@@ -891,7 +923,7 @@ export default function ExamScreen({ navigation, route }) {
     setIsChecking(false);
 
     try {
-      ExpoSpeechRecognitionModule.abort();
+      ExpoSpeechRecognitionModule?.abort?.();
     } catch (error) {
       console.warn("Speech recognition could not be aborted.", error);
     }
@@ -1150,9 +1182,9 @@ export default function ExamScreen({ navigation, route }) {
             <Text style={[styles.question, { color: palette.app.text }]}>
               {questionText}
             </Text>
-            {direction === "trToEn" && currentCard.imgSrc ? (
+            {direction === "trToEn" && currentCardImageSource ? (
               <Image
-                source={{ uri: currentCard.imgSrc }}
+                source={currentCardImageSource}
                 onError={() =>
                   console.warn("Image could not be loaded.", currentCard.imgSrc)
                 }
@@ -1165,9 +1197,9 @@ export default function ExamScreen({ navigation, route }) {
             <Text style={[styles.answer, { color: palette.app.text }]}>
               {answerTarget}
             </Text>
-            {direction === "enToTr" && currentCard.imgSrc ? (
+            {direction === "enToTr" && currentCardImageSource ? (
               <Image
-                source={{ uri: currentCard.imgSrc }}
+                source={currentCardImageSource}
                 onError={() =>
                   console.warn("Image could not be loaded.", currentCard.imgSrc)
                 }
@@ -1177,9 +1209,9 @@ export default function ExamScreen({ navigation, route }) {
             <Text style={[styles.example, { color: palette.app.mutedText }]}>
               {currentCard.example}
             </Text>
-            {direction !== "enToTr" && currentCard.imgSrc ? (
+            {direction !== "enToTr" && currentCardImageSource ? (
               <Image
-                source={{ uri: currentCard.imgSrc }}
+                source={currentCardImageSource}
                 onError={() =>
                   console.warn("Image could not be loaded.", currentCard.imgSrc)
                 }
@@ -1387,7 +1419,11 @@ export default function ExamScreen({ navigation, route }) {
                 activeOpacity={0.85}
                 style={[
                   styles.recordButton,
-                  { backgroundColor: palette.score.low },
+                  {
+                    backgroundColor: isSpeechRecognitionAvailable
+                      ? palette.score.low
+                      : palette.app.border,
+                  },
                 ]}
                 onPressIn={startSpeechRecognition}
                 onPressOut={stopSpeechRecognitionAndCheck}
